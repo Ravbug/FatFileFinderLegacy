@@ -46,6 +46,7 @@ namespace FatFileFinder
             bgWorker = new System.Threading.Thread(() => fd.size(UpdateUIOnCallback));
             sidebarPath = path;
             revealButton.IsEnabled = true;
+            copyPath.IsEnabled = true;
             bgWorker.Start();
         }
 
@@ -61,6 +62,7 @@ namespace FatFileFinder
                     //sign up the object's click event
                     fd1.GridClicked += OnGridClicked;
                     fd1.GridSingleClick += onSingleClick;
+                    fd1.GridKeys += onGridKey;
                 });
             }
             //update progress bar
@@ -126,6 +128,7 @@ namespace FatFileFinder
                 addToTable(sub);
                 sub.GridClicked += OnGridClicked;
                 sub.GridSingleClick += onSingleClick;
+                sub.GridKeys += onGridKey;
             }
         }
 
@@ -146,6 +149,38 @@ namespace FatFileFinder
 
             //redraw the sidebar
             updateSidebar();
+        }
+
+        protected void onGridKey(object sender, EventArgs e)
+        {
+            KeyEventArgs ke = (KeyEventArgs)e;
+            //Enter key = open file in explorer
+            if (ke.Key == Key.Enter)
+            {
+                explorerHereClicked(sender,new RoutedEventArgs());
+            }
+            //left or right arrow to change focus
+            else if (ke.Key == Key.Left)
+            {
+               FolderDisplay fd = (FolderDisplay)(sender);
+               clearTableToLevel(fd.level);
+            }
+            else if (ke.Key == Key.Right)
+            {
+                //transfer focus
+                FolderDisplay fd = (FolderDisplay)sender;
+                if (fd.level < displayList.Count-1) {
+                    DataGrid dtemp = displayList[fd.level + 1].dg;
+                    //set selected item
+                    if (dtemp.Items.Count > 0)
+                    {
+                        dtemp.SelectedItem = dtemp.Items[0];
+                        //setfocus
+                        //FocusManager.SetFocusedElement(dtemp, (IInputElement)dtemp.ItemContainerGenerator.Items[0]);
+                    }
+                }
+
+            }
         }
 
         //updates the info sidebar
@@ -237,7 +272,7 @@ namespace FatFileFinder
         }
 
 
-        //when testbutton clicked
+        //when stop button clicked
         private void suspend_clicked(object sender, RoutedEventArgs e)
         {
             if (bgWorker != null)
@@ -328,6 +363,11 @@ namespace FatFileFinder
             {
                 Process.Start("explorer.exe", new FileInfo(sidebarPath).Directory.FullName);
             }
+        }
+
+        private void copyPathClicked(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(sidebarPath);
         }
     }
 

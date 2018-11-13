@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace FatFileFinder
@@ -20,7 +21,8 @@ namespace FatFileFinder
 
         //event for UI
         public event EventHandler GridClicked;
-        public EventHandler GridSingleClick;
+        public event EventHandler GridSingleClick;
+        public event EventHandler GridKeys;
         /*
          * Constructor
          * @param fd: FolderData object to display
@@ -45,6 +47,7 @@ namespace FatFileFinder
             //click handlers
             dg.MouseDoubleClick += cellClicked;
             dg.MouseLeftButtonUp += cellSingleClick;
+            dg.KeyUp += keyPressed;
 
             updateTableListing();
 
@@ -62,6 +65,40 @@ namespace FatFileFinder
              DataGridTextColumn size = new DataGridTextColumn() { Header = "Size" };
              header.Binding = new Binding("Size");
              dg.Columns.Add(size);*/
+        }
+
+        /* Handles Keyboard input in the datagrid
+         * Supported keys: Arrows, Enter
+         */
+        private void keyPressed(object sender, RoutedEventArgs e)
+        {
+            KeyEventArgs ke = (KeyEventArgs)e;
+
+            //if up or down arrow, datagrid automatically moves the selected cell, so only need to call the mouse
+            //click event
+            if (ke.Key == Key.Up || ke.Key == Key.Down)
+            {
+                cellSingleClick(sender, e);
+            }
+            //right arrow = doubleclick
+            else if (ke.Key == Key.Right)
+            {
+                cellClicked(sender, e);
+                //Make other datagrid the focus
+                GridKeys(this,e);
+            }
+            //left arrow = backtrack
+            else if (ke.Key == Key.Left)
+            {
+                //transfer keyboard input to the other datagrid
+                GridKeys(this, e);
+            }
+            //enter key = open folder
+            else if (ke.Key == Key.Enter)
+            {
+                GridKeys(this,e);
+            }
+
         }
 
         //when a cell in this grid is double-clicked

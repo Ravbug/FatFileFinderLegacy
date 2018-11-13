@@ -76,6 +76,8 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+
 
                 </Grid.RowDefinitions>
                 <!-- Header Labels -->
@@ -103,9 +105,8 @@
                 <Label x:Name="FreadonlyL" Grid.Row="8" Grid.Column="1" />
                 <Label x:Name="FtempL" Grid.Row="9" Grid.Column="1" />
 
-
-
                 <Button x:Name="revealButton" Grid.Row="100" Grid.ColumnSpan="2" Content="Reveal in Explorer" Click="explorerHereClicked" IsEnabled="False" ToolTip="Open this folder, or the containing folder of the current file"/>
+                <Button x:Name="copyPath" Grid.Row="10" Grid.ColumnSpan="2" Content="Copy Path" Click="copyPathClicked" IsEnabled="False" ToolTip="Copy full path to this item"/>
             </Grid>
         </ScrollViewer>
 
