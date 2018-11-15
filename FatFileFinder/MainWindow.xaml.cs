@@ -270,7 +270,7 @@ namespace FatFileFinder
             Grid.SetColumn(gs, ContentGrid.ColumnDefinitions.Count - 1);
             Grid.SetRow(gs, 1);
 
-            ContentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            ContentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1,GridUnitType.Star) });
             ContentGrid.Children.Add(fd.dg);
             Grid.SetRow(fd.dg, 1);
             Grid.SetColumn(fd.dg, ContentGrid.ColumnDefinitions.Count - 1);
