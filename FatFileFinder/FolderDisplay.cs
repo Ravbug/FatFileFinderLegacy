@@ -18,6 +18,7 @@ namespace FatFileFinder
         public FolderData folderData;
         public int level;
         public static int maxLevel;
+        public static int maxWidth = 100;
 
         //event for UI
         public event EventHandler GridClicked;
@@ -51,6 +52,15 @@ namespace FatFileFinder
             dg.KeyUp += keyPressed;
 
             updateTableListing();
+
+            /*//fix the width to prevent columns from being too wide
+            foreach (DataGridColumn c in dg.Columns)
+            {
+                if (c.ActualWidth > maxWidth)
+                {
+                    c.MaxWidth = maxWidth;
+                }
+            }*/
 
             /* //Name column
              DataGridTextColumn header = new DataGridTextColumn() { Header = "Name" };

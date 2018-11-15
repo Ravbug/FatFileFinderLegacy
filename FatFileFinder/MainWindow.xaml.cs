@@ -264,12 +264,13 @@ namespace FatFileFinder
         private void addToTable(FolderDisplay fd, bool readd = true)
         {
             //create the grid separator
-            ContentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5) });
+            /*ContentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5) });
             GridSplitter gs = new GridSplitter() { Width = 5 };
             ContentGrid.Children.Add(gs);
             Grid.SetColumn(gs, ContentGrid.ColumnDefinitions.Count - 1);
-            Grid.SetRow(gs, 1);
+            Grid.SetRow(gs, 1);*/
 
+            //add the datagrid
             ContentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1,GridUnitType.Star) });
             ContentGrid.Children.Add(fd.dg);
             Grid.SetRow(fd.dg, 1);

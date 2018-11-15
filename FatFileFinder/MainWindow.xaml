@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FatFileFinder"
         mc:Ignorable="d"
-        Title="FatFileFinder" Height="450" Width="800">
+        Title="FatFileFinder" Height="470" Width="800">
 
     <Grid x:Name="MasterGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Auto" >
         <Grid.ColumnDefinitions>
@@ -40,7 +40,7 @@
         </ScrollViewer>
 
         <StatusBar Grid.Row="2" Grid.ColumnSpan="3">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="75" />
@@ -52,7 +52,7 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="StatusL" Grid.Column="0" Content="Choose a folder to size" Margin="0,0,0,-4"/>
                 <Button x:Name="StopBtn" Content="Stop" Grid.Column="1" Width="75" Click="suspend_clicked" IsEnabled="False" ToolTip="Stop scanning"/>
-                <ProgressBar x:Name="MainProg" Grid.Column="2" Height="20" Maximum="1" SmallChange="0.01" Margin="5,0" MinWidth="324" UseLayoutRounding="False"/>
+                <ProgressBar x:Name="MainProg" Grid.Row="0" Grid.Column="2" Maximum="1" SmallChange="0.01" Margin="5,0" MinWidth="324" />
             </Grid>
         </StatusBar>
 
@@ -80,7 +80,6 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
 
                 <!-- Header Labels -->
@@ -94,7 +93,6 @@
                 <Label Grid.Row="7" Content="Is Hidden" FontWeight="Bold" Grid.ColumnSpan="2" />
                 <Label Grid.Row="8" Content="Is Read Only" FontWeight="Bold" Grid.ColumnSpan="2" />
                 <Label Grid.Row="9" Content="Full Path" FontWeight="Bold" Grid.ColumnSpan="2" />
-                <Label Grid.Row="10" Content="" FontWeight="Bold" Grid.ColumnSpan="2" />
 
                 <!-- Labels to show info -->
                 <Label x:Name="FnameL" Grid.Row="0" Grid.Column="2" Margin="0,0,-0.333,0" />
@@ -109,8 +107,8 @@
                 <Label x:Name="FtempL" Grid.Row="9" Grid.Column="2" Margin="0,0,-0.333,0" />
                 <TextBox IsReadOnly="True" x:Name="FpathT" Grid.Row="9" VerticalContentAlignment="Center" Grid.Column="2" BorderBrush="White" Margin="0,0,-0.333,0" />
 
-                <Button x:Name="revealButton" Grid.Row="12" Grid.ColumnSpan="3" Content="Reveal in Explorer" Click="explorerHereClicked" IsEnabled="False" ToolTip="Open this folder, or the containing folder of the current file" Margin="0,5,-0.333,5"/>
-                <Button x:Name="copyPath" Grid.Row="11" Grid.ColumnSpan="3" Content="Copy Path" Click="copyPathClicked" IsEnabled="False" ToolTip="Copy full path to this item" Margin="0,5,-0.333,5"/>
+                <Button x:Name="revealButton" Grid.Row="11" Grid.ColumnSpan="3" Content="Reveal in Explorer" Click="explorerHereClicked" IsEnabled="False" ToolTip="Open this folder, or the containing folder of the current file" Margin="0,5,-0.333,5"/>
+                <Button x:Name="copyPath" Grid.Row="10" Grid.ColumnSpan="3" Content="Copy Path" Click="copyPathClicked" IsEnabled="False" ToolTip="Copy full path to this item" Margin="0,5,-0.333,5"/>
             </Grid>
         </ScrollViewer>
 
