@@ -16,6 +16,7 @@ namespace FatFileFinder
         public double files_size = 0;
         public int num_items  = 0;
         public double total_size = 0;
+        public bool root;
 
         //List of subfolders in this folder
         public List<FolderData> subFolders = new List<FolderData>();
@@ -32,8 +33,9 @@ namespace FatFileFinder
         public DirectoryInfo[] sfdi;
 
         //constructor
-        public FolderData(string inpath)
-        {  
+        public FolderData(string inpath, bool r = false)
+        {
+            root = r;
             try
             {
                 path = new DirectoryInfo(inpath);
@@ -81,8 +83,10 @@ namespace FatFileFinder
             {
                 return;
             }
+            total_size = 0;
+            files_size = 0;
+            num_items = 0;
             size_files();
-
 
             //build the list of subfolders by sizing each one
             double prog = 0;
@@ -101,6 +105,11 @@ namespace FatFileFinder
                     prog++;
                     callback(this, prog / sfdi.Count());
                 }
+            }
+            //if the target folder has no subfolders
+            if (prog == 0 && callback != null)
+            {
+                callback(this, 1);
             }
         }
         

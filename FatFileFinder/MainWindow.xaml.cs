@@ -41,11 +41,12 @@ namespace FatFileFinder
         //sizes a folder and updates the UI
         private void sizeFolder(string path)
         {
-            FolderData fd = new FolderData(path);
+            FolderData fd = new FolderData(path,true);
             displayList = new List<FolderDisplay>();
             bgWorker = new System.Threading.Thread(() => fd.size(UpdateUIOnCallback));
             sidebarPath = path;
             revealButton.IsEnabled = true;
+            RevealToolbar.IsEnabled = true;
             copyPath.IsEnabled = true;
             bgWorker.Start();
         }
@@ -72,6 +73,16 @@ namespace FatFileFinder
                 StatusL.Content = "Sizing " + fd.ToString() + " (" + Math.Round(prog * 100) + "%)";
                 //loop through displaylist to get the correct folderdisplays
                 FolderData root = fd;
+                //if displaylist is empty (e.g. no subfolders), create one
+                if (displayList.Count == 0)
+                {
+                    FolderDisplay fdisp = new FolderDisplay(root, 0);
+                    fdisp.GridClicked += OnGridClicked;
+                    fdisp.GridSingleClick += onSingleClick;
+                    fdisp.GridKeys += onGridKey;
+                    displayList.Add(fdisp);
+
+                }
                 displayList[0].folderData = root;
                 displayList[0].updateTableListing();
                 for (int i = 1; i < displayList.Count(); i++)
@@ -100,7 +111,10 @@ namespace FatFileFinder
                 if (prog == 1)
                 {
                     ChooseFolderBtn.IsEnabled = true;
+                    ResizeFolder.IsEnabled = true;
                     StopBtn.IsEnabled = false;
+                    sidebarFolder = fd;
+                    updateSidebar();
                 }
             });
 
@@ -110,25 +124,26 @@ namespace FatFileFinder
         protected void OnGridClicked(object sender, EventArgs e)
         {
             FolderDisplayEvent fde = (FolderDisplayEvent)e;
-            //check the fde.fileInfo and fdee.folderData to see which to do
+            //check the fde.fileInfo and fde.folderData to see which to do
             if (fde.fileInfo != null)
             {
-                //show details in sidepanel
+                updateSidebar();
             }
             else
             {
                 //open another panel
                 FolderDisplay fds = (FolderDisplay)sender;
 
-                //magic numbers oof
-                clearTableToLevel(fds.level);
-
+                //clear the list as needed
+                clearTableToLevel(fds.level); 
+                
                 //display the new folder display and register click handler
                 FolderDisplay sub = new FolderDisplay(fde.folderData, fds.level + 1);
                 addToTable(sub);
                 sub.GridClicked += OnGridClicked;
                 sub.GridSingleClick += onSingleClick;
                 sub.GridKeys += onGridKey;
+                     
             }
         }
 
@@ -213,7 +228,7 @@ namespace FatFileFinder
             FcreatedL.Content = data.CreationTime;
             FreadonlyL.Content = fa.HasFlag(FileAttributes.ReadOnly);
             FtempL.Content = fa.HasFlag(FileAttributes.Temporary);
-
+            FpathT.Text = data.FullName;
         }
 
         ///<summary>
@@ -281,6 +296,7 @@ namespace FatFileFinder
                 bgWorker.Abort();
                 StopBtn.IsEnabled = false;
                 ChooseFolderBtn.IsEnabled = true;
+                ResizeFolder.IsEnabled = true;
             }
         }
 
@@ -296,6 +312,7 @@ namespace FatFileFinder
                 clearTableToLevel(0);
                 sizeFolder(ofd.SelectedPath);
                 ChooseFolderBtn.IsEnabled = false;
+                ResizeFolder.IsEnabled = false;
                 StopBtn.IsEnabled = true;
             }
         }
@@ -308,6 +325,7 @@ namespace FatFileFinder
             {
                 return;
             }
+            //reinitialize background worker
             bgWorker = new System.Threading.Thread(() =>
             {
                 bool onProgressUpdate(FolderData fd, double prog)
@@ -321,8 +339,14 @@ namespace FatFileFinder
                             //calculate the level
                             int lev = sidebarFolder.path.FullName.Split(System.IO.Path.DirectorySeparatorChar).Length - displayList[0].folderData.path.FullName.Split(System.IO.Path.DirectorySeparatorChar).Length - 1;
                             if (lev < 0) { lev = 0; }
+                            //if this is the root folder, don't add a second collumn when updating UI
+                            if (fd.root)
+                            {
+                                lev = -1;
+                            }
                             //call the grid clicked event to update the table views
                             OnGridClicked(new FolderDisplay(sidebarFolder, lev), new FolderDisplayEvent() { folderData = sidebarFolder });
+                            ResizeFolder.IsEnabled = true;
                         }
                         StatusL.Content = "Refreshing " + sidebarPath + " (" + Math.Round(prog * 100) + "%)";
                         MainProg.Value = prog;
@@ -347,6 +371,7 @@ namespace FatFileFinder
 
             bgWorker.Start();
             StopBtn.IsEnabled = true;
+            ResizeFolder.IsEnabled = false;
         }
 
         /*

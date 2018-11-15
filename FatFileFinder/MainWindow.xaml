@@ -11,7 +11,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="250" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -20,8 +20,10 @@
         </Grid.RowDefinitions>
 
         <ToolBar Grid.Row="0" Grid.ColumnSpan="2">
-            <Button x:Name="ChooseFolderBtn" Content="🔍📂" Click="chooseClicked" Margin="0,2,0,0" VerticalAlignment="Top" ToolTip="Scan a folder or drive" />
-            <Button x:Name="ReizeFolder" Content="🔁📂" Click="resizeFolder" Margin="5,2,0,0" VerticalAlignment="Top" ToolTip="Reload the selected folder" />
+            <Button x:Name="ChooseFolderBtn" Content="📂" Click="chooseClicked" Margin="0,2,0,0" VerticalAlignment="Top" ToolTip="Scan a folder or drive" />
+            <Button x:Name="ResizeFolder" Content="🔁" Click="resizeFolder" Margin="5,2,0,0" VerticalAlignment="Top" ToolTip="Reload the selected folder" IsEnabled="False" />
+            <Button x:Name="RevealToolbar" Click="explorerHereClicked" Content="➡" Margin="5,2,2,0" ToolTip="Reveal selected item in File Explorer" IsEnabled="False"/>
+
         </ToolBar>
 
 
@@ -58,10 +60,11 @@
             <Label Content="Item Info"/>
         </Menu>
 
-        <ScrollViewer Grid.Column="3" Grid.Row="1">
-            <Grid >
+        <ScrollViewer Grid.Column="3" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="5" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="73.735"/>
+                    <ColumnDefinition Width="26.265"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -77,36 +80,37 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-
-
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <!-- Header Labels -->
-                <Label Grid.Row="0" Content="Name" FontWeight="Bold" />
-                <Label Grid.Row="1" Content="Size" FontWeight="Bold" />
-                <Label Grid.Row="2" Content="Type" FontWeight="Bold" />
-                <Label Grid.Row="3" Content="Items" FontWeight="Bold" />
-                <Label Grid.Row="4" Content="Modified" FontWeight="Bold" />
-                <Label Grid.Row="5" Content="Created" FontWeight="Bold" />
-                <Label Grid.Row="6" Content="Is System" FontWeight="Bold" />
-                <Label Grid.Row="7" Content="Is Hidden" FontWeight="Bold" />
-                <Label Grid.Row="8" Content="Is Read Only" FontWeight="Bold" />
-                <Label Grid.Row="9" Content="Is Temporary" FontWeight="Bold" />
 
+                <!-- Header Labels -->
+                <Label Grid.Row="0" Content="Name" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="1" Content="Size" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="2" Content="Type" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="3" Content="Items" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="4" Content="Modified" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="5" Content="Created" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="6" Content="Is System" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="7" Content="Is Hidden" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="8" Content="Is Read Only" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="9" Content="Full Path" FontWeight="Bold" Grid.ColumnSpan="2" />
+                <Label Grid.Row="10" Content="" FontWeight="Bold" Grid.ColumnSpan="2" />
 
                 <!-- Labels to show info -->
-                <Label x:Name="FnameL" Grid.Row="0" Grid.Column="1" />
-                <Label x:Name="FsizeL" Grid.Row="1" Grid.Column="1"  />
-                <Label x:Name="FtypeL" Grid.Row="2" Grid.Column="1" />
-                <Label x:Name="FitemsL" Grid.Row="3" Grid.Column="1"  />
-                <Label x:Name="FmodifiedL" Grid.Row="4" Grid.Column="1"  />
-                <Label x:Name="FcreatedL" Grid.Row="5" Grid.Column="1"  />
-                <Label x:Name="FsystemL" Grid.Row="6" Grid.Column="1"  />
-                <Label x:Name="FhiddenL" Grid.Row="7" Grid.Column="1" />
-                <Label x:Name="FreadonlyL" Grid.Row="8" Grid.Column="1" />
-                <Label x:Name="FtempL" Grid.Row="9" Grid.Column="1" />
+                <Label x:Name="FnameL" Grid.Row="0" Grid.Column="2" Margin="0,0,-0.333,0" />
+                <Label x:Name="FsizeL" Grid.Row="1" Grid.Column="2" Margin="0,0,-0.333,0"  />
+                <Label x:Name="FtypeL" Grid.Row="2" Grid.Column="2" Margin="0,0,-0.333,0" />
+                <Label x:Name="FitemsL" Grid.Row="3" Grid.Column="2" Margin="0,0,-0.333,0"  />
+                <Label x:Name="FmodifiedL" Grid.Row="4" Grid.Column="2" Margin="0,0,-0.333,0"  />
+                <Label x:Name="FcreatedL" Grid.Row="5" Grid.Column="2" Margin="0,0,-0.333,0"  />
+                <Label x:Name="FsystemL" Grid.Row="6" Grid.Column="2" Margin="0,0,-0.333,0"  />
+                <Label x:Name="FhiddenL" Grid.Row="7" Grid.Column="2" Margin="0,0,-0.333,0" />
+                <Label x:Name="FreadonlyL" Grid.Row="8" Grid.Column="2" Margin="0,0,-0.333,0" />
+                <Label x:Name="FtempL" Grid.Row="9" Grid.Column="2" Margin="0,0,-0.333,0" />
+                <TextBox IsReadOnly="True" x:Name="FpathT" Grid.Row="9" VerticalContentAlignment="Center" Grid.Column="2" BorderBrush="White" Margin="0,0,-0.333,0" />
 
-                <Button x:Name="revealButton" Grid.Row="100" Grid.ColumnSpan="2" Content="Reveal in Explorer" Click="explorerHereClicked" IsEnabled="False" ToolTip="Open this folder, or the containing folder of the current file"/>
-                <Button x:Name="copyPath" Grid.Row="10" Grid.ColumnSpan="2" Content="Copy Path" Click="copyPathClicked" IsEnabled="False" ToolTip="Copy full path to this item"/>
+                <Button x:Name="revealButton" Grid.Row="12" Grid.ColumnSpan="3" Content="Reveal in Explorer" Click="explorerHereClicked" IsEnabled="False" ToolTip="Open this folder, or the containing folder of the current file" Margin="0,5,-0.333,5"/>
+                <Button x:Name="copyPath" Grid.Row="11" Grid.ColumnSpan="3" Content="Copy Path" Click="copyPathClicked" IsEnabled="False" ToolTip="Copy full path to this item" Margin="0,5,-0.333,5"/>
             </Grid>
         </ScrollViewer>
 
