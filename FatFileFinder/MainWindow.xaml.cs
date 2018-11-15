@@ -38,7 +38,10 @@ namespace FatFileFinder
             displayList = new List<FolderDisplay>();
         }
 
-        //sizes a folder and updates the UI
+       /// <summary>
+       /// Sizes the folder tree with the given root folder on a background thread
+       /// </summary>
+       /// <param name="path">String representing the fully qualified path to the root folder</param>
         private void sizeFolder(string path)
         {
             FolderData fd = new FolderData(path,true);
@@ -51,7 +54,12 @@ namespace FatFileFinder
             bgWorker.Start();
         }
 
-        //called on progress updates with the root FolderData and the progress value
+       /// <summary>
+       /// Updates the UI on progress updates from the background thread
+       /// </summary>
+       /// <param name="fd">The FolderData object passed on the callback</param>
+       /// <param name="prog">Double from 0-1 representing the current progress</param>
+       /// <returns>true</returns>
         private bool UpdateUIOnCallback(FolderData fd, double prog)
         {   //if first update show UI
             if (fd.subFolders.Count() == 1)
@@ -121,6 +129,11 @@ namespace FatFileFinder
             return true;
         }
 
+        /// <summary>
+        /// Called when a grid row is double clicked (event handler for event raised in FolderDisplay class)
+        /// </summary>
+        /// <param name="sender">FolderDisplay object that raised the event</param>
+        /// <param name="e">Event arguments for the event</param>
         protected void OnGridClicked(object sender, EventArgs e)
         {
             FolderDisplayEvent fde = (FolderDisplayEvent)e;
@@ -147,7 +160,11 @@ namespace FatFileFinder
             }
         }
 
-        //called on single clicks in the datagrid
+        /// <summary>
+        /// Called when a row in the grid is single clicked (for updating the sidebar)
+        /// </summary>
+        /// <param name="sender">FolderDisplay object that raised the event</param>
+        /// <param name="e">Event arguments for the event</param>
         protected void onSingleClick(object sender, EventArgs e)
         {
             FolderDisplayEvent fde = (FolderDisplayEvent)e;
@@ -166,6 +183,11 @@ namespace FatFileFinder
             updateSidebar();
         }
 
+        /// <summary>
+        /// Called when the user presses a key and the key press cannot be properly handled by the FolderDisplay object (transferring focus, etc)
+        /// </summary>
+        /// <param name="sender">FolderDisplay object that raised the event</param>
+        /// <param name="e">KeyEventArgs for key press</param>
         protected void onGridKey(object sender, EventArgs e)
         {
             KeyEventArgs ke = (KeyEventArgs)e;
@@ -198,7 +220,10 @@ namespace FatFileFinder
             }
         }
 
-        //updates the info sidebar
+        /// <summary>
+        /// Updates the sidebar with attributes about the file
+        /// Uses the global sidebarPath variable to determine which file to display properties for
+        /// </summary>
         private void updateSidebar()
         {
             //Get fileattributes
@@ -231,9 +256,11 @@ namespace FatFileFinder
             FpathT.Text = data.FullName;
         }
 
-        ///<summary>
-        ///Adds the specified FolderData object to the ContentGrid
-        ///</summary>
+        /// <summary>
+        /// Adds a FolderDisplay object to the UI's column view
+        /// </summary>
+        /// <param name="fd">FolderDisplay object to add</param>
+        /// <param name="readd">Whether this FolderDisplay should be re-added to the displayList</param>
         private void addToTable(FolderDisplay fd, bool readd = true)
         {
             //create the grid separator
@@ -263,7 +290,13 @@ namespace FatFileFinder
             MainScrollView.UpdateLayout();
         }
 
-        //blanks out the UI
+        /// <summary>
+        /// Removes columns from the column view to a certain level, starting from the end
+        /// </summary>
+        /// <example>
+        /// clearTableToLevel(5); //removes all the columns after the 5th column
+        /// </example>
+        /// <param name="level">Level to clear to (zero based)</param>
         private void clearTableToLevel(int level)
         {
 
@@ -287,7 +320,11 @@ namespace FatFileFinder
         }
 
 
-        //when stop button clicked
+        /// <summary>
+        /// Called when the Stop button is pressed. Cancels any work the BGworker is doing
+        /// </summary>
+        /// <param name="sender">Button that raised the event</param>
+        /// <param name="e">RoutedEventArgs from the button press</param>
         private void suspend_clicked(object sender, RoutedEventArgs e)
         {
             if (bgWorker != null)
@@ -300,7 +337,11 @@ namespace FatFileFinder
             }
         }
 
-        //choose folder button clicked
+        /// <summary>
+        /// Called when the choose folder button is pressed
+        /// </summary>
+        /// <param name="sender">Button that raised the event</param>
+        /// <param name="e">RoutedEventArgs from the button</param>
         private void chooseClicked(object sender, RoutedEventArgs e)
         {
             //FolderBrowser sucks, OpenFileDialog is much better but doesn't allow folder picking
@@ -317,8 +358,12 @@ namespace FatFileFinder
             }
         }
 
-        /* Refreshes the contents of a folder and properties
-         */
+        /// <summary>
+        /// Refreshes the selected folder in the UI on a background thread. Has special case code.
+        /// Uses the value stored in the sidebarFolder to choose the folder to resize.
+        /// </summary>
+        /// <param name="sender">Object that raised the event</param>
+        /// <param name="e">Arguments about the event</param>
         private void resizeFolder(object sender, RoutedEventArgs e)
         {
             if (sidebarFolder == null)
@@ -374,9 +419,11 @@ namespace FatFileFinder
             ResizeFolder.IsEnabled = false;
         }
 
-        /*
-         * Opens the file explorer in the current folder
-         */
+        /// <summary>
+        /// Opens the selected folder in File Explorer. If a file is selected, the containing folder is revealed.
+        /// </summary>
+        /// <param name="sender">Object that raised the event</param>
+        /// <param name="e">Event arguments</param>
         private void explorerHereClicked(object sender, RoutedEventArgs e)
         {
             FileAttributes fa = File.GetAttributes(sidebarPath);
@@ -390,6 +437,11 @@ namespace FatFileFinder
             }
         }
 
+        /// <summary>
+        /// Called when the Copy Path button is clicked. Copies the full path to the selected item to the clipboard
+        /// </summary>
+        /// <param name="sender">Button that raised event</param>
+        /// <param name="e">Event arguments</param>
         private void copyPathClicked(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(sidebarPath);
@@ -399,8 +451,11 @@ namespace FatFileFinder
     //for the table with the listings
     public class dataEntry
     {
+        //Name of the item (file name)
         public string Name { get; set; }
+        //percentage of the folder this item occupies
         public double Percentage { get; set; }
+        //formatted file size
         public string Size { get; set; }
     }
 }

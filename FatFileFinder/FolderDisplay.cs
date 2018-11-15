@@ -23,11 +23,12 @@ namespace FatFileFinder
         public event EventHandler GridClicked;
         public event EventHandler GridSingleClick;
         public event EventHandler GridKeys;
-        /*
-         * Constructor
-         * @param fd: FolderData object to display
-         * @param l: level of the FolderData
-         * */
+        
+        /// <summary>
+        /// Constructor for FolderDisplay objects
+        /// </summary>
+        /// <param name="fd">FolderData object to display</param>
+        /// <param name="l">UI Level (0 is root, 1 is first subfolder level, etc)</param>
         public FolderDisplay(FolderData fd, int l)
         {
             //setup grid
@@ -67,9 +68,11 @@ namespace FatFileFinder
              dg.Columns.Add(size);*/
         }
 
-        /* Handles Keyboard input in the datagrid
-         * Supported keys: Arrows, Enter
-         */
+        /// <summary>
+        /// Called when key presses are detected in the datagrid
+        /// </summary>
+        /// <param name="sender">Object that raised event</param>
+        /// <param name="e">KeyEventArgs containg data for which key was pressed</param>
         private void keyPressed(object sender, RoutedEventArgs e)
         {
             KeyEventArgs ke = (KeyEventArgs)e;
@@ -101,7 +104,11 @@ namespace FatFileFinder
 
         }
 
-        //when a cell in this grid is double-clicked
+        /// <summary>
+        /// Called when a cell is double-clicked in the datagrid. Raises an event to the main UI based on which item was clicked.
+        /// </summary>
+        /// <param name="sender">DataGrid that raised event</param>
+        /// <param name="e">Info about event</param>
         private void cellClicked(object sender, RoutedEventArgs e)
         {
             //it has to be a row
@@ -151,7 +158,11 @@ namespace FatFileFinder
             }          
         }
 
-        //called on single click events
+        /// <summary>
+        /// Called when a row is single clicked in the datagrid. Used to update the sidebarPath and sidebar data
+        /// </summary>
+        /// <param name="sender">DataGrid that raised the event</param>
+        /// <param name="e">Info about the click event</param>
         private void cellSingleClick(object sender, RoutedEventArgs e)
         {
             //it has to be a row
@@ -203,7 +214,9 @@ namespace FatFileFinder
         }
 
 
-        //Takes a FolderData and polulates a DataGrid passed in
+        /// <summary>
+        /// Updates the data in the DataGrid based on the data in this object's FolderData object
+        /// </summary>
         public void updateTableListing()
         {
             List<dataEntry> lde = new List<dataEntry>();
@@ -232,7 +245,11 @@ namespace FatFileFinder
             dg.ItemsSource = lde;
         }
 
-        //takes a file size and converts it to the best size unit
+        /// <summary>
+        /// Formats a file size in bytes into a nicer format (1024 bytes -> 1 KB)
+        /// </summary>
+        /// <param name="rawSize">Size of the file in Bytes</param>
+        /// <returns>A string containing the formatted file size</returns>
         public static string formatSize(double rawSize)
         {
             string formatted = "";
@@ -257,6 +274,10 @@ namespace FatFileFinder
             return formatted;
         }
 
+        /// <summary>
+        /// Formats the total size of the this object's FolderData object
+        /// </summary>
+        /// <returns>Formatted size (see formatSize)</returns>
         public string totalSizeFormatted()
         {
             return formatSize(folderData.total_size);
@@ -265,7 +286,9 @@ namespace FatFileFinder
 
     class FolderDisplayEvent : EventArgs
     {
+        //FolderData if the event is for a folder
         public FolderData folderData;
+        //FileInfo if the event is for a file
         public FileInfo fileInfo;
     }
 }

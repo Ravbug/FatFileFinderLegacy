@@ -32,7 +32,11 @@ namespace FatFileFinder
         //subfolders as non-tree to prevent explosion when instantiating one of these
         public DirectoryInfo[] sfdi;
 
-        //constructor
+        /// <summary>
+        /// Constructor for a FolderData
+        /// </summary>
+        /// <param name="inpath">Path to the folder on disk</param>
+        /// <param name="r">Whether this FolderData is your root folder. Defaults to false.</param>
         public FolderData(string inpath, bool r = false)
         {
             root = r;
@@ -47,7 +51,10 @@ namespace FatFileFinder
             }
         }
 
-        //get the size of non-directory items in this folder
+       /// <summary>
+       /// Gets the total size of the non-folder items in the immediate folder (not including subfolders)
+       /// Updates the num_items and total_size properties
+       /// </summary>
         void size_files()
         {
             num_items = 0;
@@ -67,13 +74,16 @@ namespace FatFileFinder
                 }
                 total_size = files_size;
             }
-            catch (System.UnauthorizedAccessException e)
+            catch (System.UnauthorizedAccessException)
             {
                 //record the error somewhere
             }
         }
 
-        //size this folder and all subfolders, and update the fields
+        /// <summary>
+        /// Recursively determines the total size of the folder, including subfolders
+        /// </summary>
+        /// <param name="callback">Bool returning function that takes a double 0-1. Pass this if you want progress updates (i.e. doing the size asyncronously)</param>
         public void size(Func<FolderData, double, bool> callback = null)
         {
             sfDict = new Dictionary<string, FolderData>();
@@ -113,8 +123,11 @@ namespace FatFileFinder
             }
         }
         
-        /* Atempts to find the FolderData object specified in this folder
-         */ 
+        /// <summary>
+        /// Determines if a folder is in this folder, including subfolders
+        /// </summary>
+        /// <param name="path">Fully qualified path to search for</param>
+        /// <returns>the FolderData object, or null if it does not exist</returns>
         public FolderData find(string path)
         {
             FolderData root = this;
@@ -134,6 +147,10 @@ namespace FatFileFinder
             return root;
         }
 
+        /// <summary>
+        /// ToString override. Returns the name property
+        /// </summary>
+        /// <returns>The name property</returns>
         public override string ToString()
         {
             return this.path.Name;
