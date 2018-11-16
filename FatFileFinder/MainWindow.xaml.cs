@@ -52,6 +52,7 @@ namespace FatFileFinder
             RevealToolbar.IsEnabled = true;
             copyPath.IsEnabled = true;
             bgWorker.Start();
+            ContentGrid.Children.Remove(LInstructions);
         }
 
        /// <summary>

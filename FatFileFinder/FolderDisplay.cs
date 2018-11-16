@@ -52,7 +52,7 @@ namespace FatFileFinder
             dg.KeyUp += keyPressed;
 
             updateTableListing();
-
+          
             /*//fix the width to prevent columns from being too wide
             foreach (DataGridColumn c in dg.Columns)
             {

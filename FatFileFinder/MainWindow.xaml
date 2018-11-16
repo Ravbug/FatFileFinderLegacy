@@ -35,7 +35,7 @@
                     <RowDefinition Height="30" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
+                <Label x:Name="LInstructions" Grid.Row="1" Content="Open a folder to scan" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Foreground="#FFAFAFAF"></Label>
             </Grid>
         </ScrollViewer>
 
