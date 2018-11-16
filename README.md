@@ -23,6 +23,9 @@ To view an item in the File Explorer, select it in the table and either press th
 
 To copy the full path to an item, select it in the table and press `Copy Path` in the sidebar.
 
+### Screenshots
+![Main Window](https://i.imgur.com/19IEXtf.png)
+
 ### Compiling it yourself
 This program was compiled with Visual Studio Community 2017. Older versions of Visual Studio are not guarenteed to work.
 1. Clone the repo (Download as ZIP) using the green button.
