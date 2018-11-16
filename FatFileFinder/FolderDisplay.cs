@@ -24,6 +24,19 @@ namespace FatFileFinder
         public event EventHandler GridClicked;
         public event EventHandler GridSingleClick;
         public event EventHandler GridKeys;
+
+        //dictionary of icons to common file extensions, for use in the table view
+        //default if not found is 📄
+        private static Dictionary<string, string> icons = new Dictionary<string, string>()
+        {
+            {".exe", "💾" },{".dll", "💾" },{".bat", "💾" },{".jar", "💾" },
+            {".iso", "💿" },{".bin", "💿"},
+            {".ai","🎨" },{".bmp","🎨" },{".gif","🎨" },{".ico","🎨" },{".jpeg","🎨" },{".jpg","🎨" },{".png","🎨" },{".psd","🎨" },{".svg","🎨" },{".tif","🎨" },
+            {".mp3","🎵" },{".aif","🎵" },{".ogg","🎵" },{".wav","🎵" },{".wma","🎵" },
+            { ".mp4","🎞"},{ ".avi","🎞"},{ ".flv","🎞"},{ ".h264","🎞"},{ ".m4v","🎞"},{ ".mkv","🎞"},{ ".mov","🎞"},{ ".mpg","🎞"},{ ".wmv","🎞"},
+            { ".7z","📦"},{ ".arj","📦"},{ ".pkg","📦"},{ ".rar","📦"},{ ".rpm","📦"},{ ".tar.gz","📦"},{ ".z","📦"},{ ".zip","📦"},
+            { ".doc","📝"},{ ".docx","📝"},{ ".odt","📝"},{ ".pdf","📝"},{ ".rtf","📝"},{ ".tex","📝"}
+        };
         
         /// <summary>
         /// Constructor for FolderDisplay objects
@@ -94,7 +107,7 @@ namespace FatFileFinder
                 cellSingleClick(sender, e);
             }
             //right arrow = doubleclick
-            else if (ke.Key == Key.Right)
+           /* else if (ke.Key == Key.Right)
             {
                 cellClicked(sender, e);
                 //Make other datagrid the focus
@@ -105,13 +118,12 @@ namespace FatFileFinder
             {
                 //transfer keyboard input to the other datagrid
                 GridKeys(this, e);
-            }
+            }*/
             //enter key = open folder
             else if (ke.Key == Key.Enter)
             {
                 GridKeys(this,e);
             }
-
         }
 
         /// <summary>
@@ -233,14 +245,14 @@ namespace FatFileFinder
             //add the Files
             foreach (System.IO.FileInfo file in folderData.files)
             {
-                lde.Add(new dataEntry() { Name = "📝 " + file.Name, Percentage = Math.Round(file.Length / folderData.total_size,4) * 100, Size = formatSize(file.Length) });
+                lde.Add(new dataEntry() { Name = getIcon(file.Extension) + " " + file.Name, Percentage = Math.Round(file.Length / folderData.total_size,9) * 100, Size = formatSize(file.Length) });
             }
            
             //add the folders
             foreach (FolderData f in folderData.subFolders)
             {
 
-                lde.Add(new dataEntry() { Name = "📁 " + f.path.Name, Percentage = Math.Round(f.total_size / folderData.total_size,4) * 100, Size = formatSize(f.total_size) });
+                lde.Add(new dataEntry() { Name = "📁 " + f.path.Name, Percentage = Math.Round(f.total_size / folderData.total_size,9) * 100, Size = formatSize(f.total_size) });
             }
 
             //add folders that still need to be sized
@@ -253,6 +265,13 @@ namespace FatFileFinder
             }
 
             dg.ItemsSource = lde;
+                
+            //sort the grid by percentage
+            System.ComponentModel.ICollectionView dataView = CollectionViewSource.GetDefaultView(dg.ItemsSource);
+            dataView.SortDescriptions.Clear();
+            dataView.SortDescriptions.Add(new System.ComponentModel.SortDescription("Percentage",System.ComponentModel.ListSortDirection.Descending));
+
+            dg.Items.Refresh();
         }
 
         /// <summary>
@@ -292,7 +311,25 @@ namespace FatFileFinder
         {
             return formatSize(folderData.total_size);
         }
+
+        /// <summary>
+        /// Returns the icon for a passed file extension
+        /// </summary>
+        /// <param name="type">File extension, including the .</param>
+        /// <returns>string containing the emoji icon</returns>
+        private string getIcon(string type)
+        {
+            try
+            {
+                return icons[type];
+            }
+            catch (KeyNotFoundException)
+            {
+                return "📄";
+            }
+        }
     }
+
 
     class FolderDisplayEvent : EventArgs
     {

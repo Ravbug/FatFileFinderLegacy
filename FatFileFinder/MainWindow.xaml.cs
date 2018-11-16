@@ -52,6 +52,7 @@ namespace FatFileFinder
             RevealToolbar.IsEnabled = true;
             copyPath.IsEnabled = true;
             bgWorker.Start();
+            //hide instructions label
             ContentGrid.Children.Remove(LInstructions);
         }
 
@@ -198,7 +199,7 @@ namespace FatFileFinder
                 explorerHereClicked(sender,new RoutedEventArgs());
             }
             //left or right arrow to change focus
-            else if (ke.Key == Key.Left)
+          /*  else if (ke.Key == Key.Left)
             {
                FolderDisplay fd = (FolderDisplay)(sender);
                clearTableToLevel(fd.level);
@@ -212,13 +213,15 @@ namespace FatFileFinder
                     //set selected item
                     if (dtemp.Items.Count > 0)
                     {
-                        dtemp.SelectedItem = dtemp.Items[0];
+                        DataGridCellInfo dgc = new DataGridCellInfo(dtemp.Items[0], dtemp.Columns[0]);
+                        dtemp.CurrentCell = dgc;
                         //setfocus
-                        //FocusManager.SetFocusedElement(dtemp, (IInputElement)dtemp.ItemContainerGenerator.Items[0]);
+                        FocusManager.SetFocusedElement(dtemp, dgc);
+                        dtemp.BeginEdit();
                     }
                 }
 
-            }
+            }*/
         }
 
         /// <summary>

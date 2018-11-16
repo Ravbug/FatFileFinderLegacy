@@ -44,7 +44,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="75" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="300"/>
 
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -52,7 +52,7 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="StatusL" Grid.Column="0" Content="Choose a folder to size" Margin="0,0,0,-4"/>
                 <Button x:Name="StopBtn" Content="Stop" Grid.Column="1" Width="75" Click="suspend_clicked" IsEnabled="False" ToolTip="Stop scanning"/>
-                <ProgressBar x:Name="MainProg" Grid.Row="0" Grid.Column="2" Maximum="1" SmallChange="0.01" Margin="5,0" MinWidth="324" />
+                <ProgressBar x:Name="MainProg" Grid.Column="2" Maximum="1" SmallChange="0.01" Margin="5,0" />
             </Grid>
         </StatusBar>
 
