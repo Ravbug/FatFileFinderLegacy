@@ -40,6 +40,6 @@ Compiling it yourself usually prevents your antivirus from deleting the exe, so 
 To report a bug, use the [Issues](https://github.com/Ravbug/FatFileFinder/issues) tab on this github page.
 
 ### Todo
-[ ] Fix progress bar not resizing properly
-[ ] There's probably some edge case somewhere that makes it crash
-[x] Adjust column view sizing
+- [ ] Fix progress bar not resizing properly
+- [ ] There's probably some edge case somewhere that makes it crash
+- [x] Adjust column view sizing
